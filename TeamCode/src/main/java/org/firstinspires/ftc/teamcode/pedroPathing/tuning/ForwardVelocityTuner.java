@@ -52,7 +52,7 @@ public class ForwardVelocityTuner extends OpMode {
 
     private PoseUpdater poseUpdater;
 
-    public static double DISTANCE = 40;
+    public static double DISTANCE = 80;
     public static double RECORD_NUMBER = 10;
 
     private Telemetry telemetryA;
@@ -85,7 +85,7 @@ public class ForwardVelocityTuner extends OpMode {
         }
 
         for (DcMotorEx motor : motors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
         for (int i = 0; i < RECORD_NUMBER; i++) {

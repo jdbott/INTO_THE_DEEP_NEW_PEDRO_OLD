@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.localizers.ThreeDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.localizers.ThreeWheelIMULocalizer;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.localizers.ThreeWheelLocalizer;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.localizers.TwoWheelLocalizer;
@@ -46,6 +47,8 @@ public class PoseUpdater {
     private long previousPoseTime;
     private long currentPoseTime;
 
+    public double inPerTick = 0.00296155;
+
     /**
      * Creates a new PoseUpdater from a HardwareMap and a Localizer.
      *
@@ -68,8 +71,14 @@ public class PoseUpdater {
      * @param hardwareMap the HardwareMap
      */
     public PoseUpdater(HardwareMap hardwareMap) {
-        // TODO: replace the second argument with your preferred localizer
-        this(hardwareMap, new ThreeWheelLocalizer(hardwareMap));
+        this.hardwareMap = hardwareMap;
+
+        // Initialize IMU and inPerTick before passing them to the localizer.
+        this.imu = hardwareMap.get(IMU.class, "imu");
+        this.inPerTick = 0.00296155; // Or some other appropriate value
+
+        // Now pass the initialized values to the localizer.
+        this.localizer = new ThreeDeadWheelLocalizer(hardwareMap, inPerTick, imu);
     }
 
     /**
@@ -264,10 +273,8 @@ public class PoseUpdater {
             currentVelocity = new Vector();
             currentVelocity.setOrthogonalComponents(getPose().getX() - previousPose.getX(), getPose().getY() - previousPose.getY());
             currentVelocity.setMagnitude(MathFunctions.distance(getPose(), previousPose) / ((currentPoseTime - previousPoseTime) / Math.pow(10.0, 9)));
-            return MathFunctions.copyVector(currentVelocity);
-        } else {
-            return MathFunctions.copyVector(currentVelocity);
         }
+        return MathFunctions.copyVector(currentVelocity);
     }
 
     /**

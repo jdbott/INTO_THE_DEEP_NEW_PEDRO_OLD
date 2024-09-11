@@ -70,7 +70,7 @@ public class LocalizationTest extends OpMode {
         }
 
         for (DcMotorEx motor : motors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
         telemetryA = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -111,7 +111,7 @@ public class LocalizationTest extends OpMode {
 
         telemetryA.addData("x", poseUpdater.getPose().getX());
         telemetryA.addData("y", poseUpdater.getPose().getY());
-        telemetryA.addData("heading", poseUpdater.getPose().getHeading());
+        telemetryA.addData("heading", Math.toDegrees(poseUpdater.getPose().getHeading()));
         telemetryA.addData("total heading", poseUpdater.getTotalHeading());
         telemetryA.update();
 
