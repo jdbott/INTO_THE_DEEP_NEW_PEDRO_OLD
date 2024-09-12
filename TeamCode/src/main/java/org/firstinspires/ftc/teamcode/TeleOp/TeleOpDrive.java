@@ -11,10 +11,7 @@ import org.firstinspires.ftc.teamcode.PedroPathing.pathGeneration.Point;
 
 @TeleOp(name = "A TeleOp")
 public class TeleOpDrive extends OpMode {
-    double targetHeading = Math.toRadians(0);
     private Follower follower;
-    private boolean headingLock = false;
-    private boolean rightStickPressed = false;
 
     // Variables for auto-align functionality
     private boolean isAutoAligning = false; // Track if the robot is in auto-align mode
@@ -27,13 +24,15 @@ public class TeleOpDrive extends OpMode {
     }
 
     @Override
+    public void start() {
+        follower.startTeleopDrive();
+    }
+
+    @Override
     public void loop() {
         if (isAutoAligning) {
-            // While auto-aligning, let the follower handle the updates
-            follower.update();
-
             // Check if the robot has finished aligning
-            if (!follower.isBusy()) {
+            if (!follower.isBusy() || gamepad1.right_bumper) {
                 isAutoAligning = false; // Alignment is complete
                 follower.startTeleopDrive(); // Resume teleop driving
             }
@@ -48,40 +47,20 @@ public class TeleOpDrive extends OpMode {
             } else if (!gamepad1.a) {
                 isAlignButtonPressed = false; // Reset button press state
             }
-
-            follower.update(); // Regular follower update
         }
+        follower.update();
     }
 
     public void updateDrive() {
-        // --- Heading Lock Logic ---
-        if (gamepad1.right_stick_button && !rightStickPressed) {
-            headingLock = !headingLock;
-            rightStickPressed = true;
-        } else if (Math.abs(gamepad1.right_stick_x) > 0.5 && headingLock) {
-            headingLock = false;
-        } else if (!gamepad1.right_stick_button) {
-            rightStickPressed = false;
-        }
-
         // --- Speed Changer Logic ---
-        boolean slowerDriving = gamepad1.left_bumper;
+        boolean slowerDriving = gamepad1.right_bumper;
         double stickScale = slowerDriving ? 0.5 : 1.0;
 
-        // --- Heading Vector Update ---
-        if (headingLock) {
-            follower.setTeleOpMovementVectors(
-                    -gamepad1.left_stick_y,
-                    -gamepad1.left_stick_x,
-                    targetHeading - follower.getPose().getHeading()
-            );
-        } else {
-            follower.setTeleOpMovementVectors(
-                    -gamepad1.left_stick_y * stickScale,
-                    -gamepad1.left_stick_x * stickScale,
-                    -gamepad1.right_stick_x * stickScale
-            );
-        }
+        follower.setTeleOpMovementVectors(
+                -gamepad1.left_stick_y * stickScale,
+                -gamepad1.left_stick_x * stickScale,
+                -gamepad1.right_stick_x * stickScale
+        );
     }
 
     private void initiateAutoAlign() {
