@@ -12,12 +12,12 @@ public class Gripper {
         rightGripperServo = hardwareMap.get(Servo.class, "rightGripperServo");
     }
 
-    public void OpenGripper() {
+    public void CloseGripper() {
         leftGripperServo.setPosition(0.4);
         rightGripperServo.setPosition(0.6);
     }
 
-    public void CloseGripper() {
+    public void OpenGripper() {
         leftGripperServo.setPosition(0.7);
         rightGripperServo.setPosition(0.3);
     }

@@ -72,7 +72,7 @@ public class PoseUpdater {
 
         // Initialize IMU and inPerTick before passing them to the localizer.
         this.imu = hardwareMap.get(IMU.class, "imu");
-        this.inPerTick = 0.00296155; // Or some other appropriate value
+        this.inPerTick = 0.00340923; // Or some other appropriate value
 
         // Now pass the initialized values to the localizer.
         this.localizer = new ThreeDeadWheelLocalizer(hardwareMap, inPerTick, imu);
