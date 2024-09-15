@@ -59,7 +59,7 @@ public class LinearSlide {
             double error = targetTicks - motor.getCurrentPosition();
 
             if (Math.abs(error) > 20) { // Ensure error threshold is handled correctly
-                double power = error * 0.0005;
+                double power = error * 0.005;
                 motor.setPower(Range.clip(power, -1, 1)); // Adjust power direction
                 slideMotorsBusy = true;
             } else {
@@ -74,7 +74,7 @@ public class LinearSlide {
         if (!slideMotorsBusy) {
             for (DcMotorEx motor : motors) {
                 double error = lastSetSlidePos - motor.getCurrentPosition();
-                motor.setPower(Range.clip((error * 0.001), -0.5, 0.5));
+                motor.setPower(Range.clip((error * 0.005), -0.5, 0.5));
             }
         }
     }
