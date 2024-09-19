@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.Limelight;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.HardwareClasses.Limelight;
 
-@Autonomous(name = "LimelightDetectorTest", group = "Sensor")
+@TeleOp(name = "LimelightDetectorTest", group = "Sensor")
 public class LimelightNeuralDetectorTest extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
