@@ -11,7 +11,8 @@ public class LimelightNeuralDetectorTest extends LinearOpMode {
         Limelight limelight = new Limelight(hardwareMap);
 
         telemetry.setMsTransmissionInterval(11);
-        limelight.pipelineSwitch(3);
+        // PIPELINE 1 IS THE NEURAL NETWORK DETECTOR
+        limelight.pipelineSwitch(1);
         limelight.start();
 
         telemetry.addData(">", "Robot Ready. Press Play.");
