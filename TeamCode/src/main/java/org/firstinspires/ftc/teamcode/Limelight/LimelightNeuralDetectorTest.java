@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Limelight;
+package org.firstinspires.ftc.teamcode.LimeLight;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

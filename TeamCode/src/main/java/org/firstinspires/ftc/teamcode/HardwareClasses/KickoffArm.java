@@ -49,7 +49,6 @@ public class KickoffArm {
         }
     }
 
-
     public void correctArmPosition() {
         if (!armMotorBusy) {
             double error = lastSetArmPos - motor.getCurrentPosition(); // Change error calculation
