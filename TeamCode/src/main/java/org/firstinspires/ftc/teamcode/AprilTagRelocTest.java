@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.PedroPathing.localization.Pose;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -28,6 +29,8 @@ public class AprilTagRelocTest extends LinearOpMode {
     private AprilTagProcessor aprilTag;
 
     private VisionPortal visionPortal;
+
+    private Pose tagPos = new Pose(15, -63, Math.toRadians(90));
 
     @Override
     public void runOpMode() {
@@ -159,32 +162,30 @@ public class AprilTagRelocTest extends LinearOpMode {
 
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
-                // Original X, Y, Z, and Yaw, Pitch, Roll values from detection
-                double x = detection.ftcPose.x;
-                double y = detection.ftcPose.y;
-                double z = detection.ftcPose.z;  // depth/distance
+                // The hypotenuse distance from the camera to the tag (camera's y value)
+                double cameraY = detection.ftcPose.y;
+
+                // The yaw angle in degrees
                 double yawDegrees = detection.ftcPose.yaw;
-                double pitchDegrees = detection.ftcPose.pitch;
-                double rollDegrees = detection.ftcPose.roll;
 
-                // Convert yaw, pitch, roll to radians
-                double yaw = Math.toRadians(yawDegrees);
-                double pitch = Math.toRadians(pitchDegrees);
-                double roll = Math.toRadians(rollDegrees);
+                // Convert yaw to radians for trigonometric calculations
+                double yawRadians = Math.toRadians(yawDegrees);
 
-                // Apply a 3D rotation matrix to correct for yaw, pitch, and roll
-                double correctedX = x * Math.cos(yaw) - y * Math.sin(yaw);
-                double correctedY = x * Math.sin(yaw) + y * Math.cos(yaw);
+                // Calculate the actual global X and Y positions
+                double trueX = cameraY * Math.sin(yawRadians);  // left-right distance
+                double trueY = cameraY * Math.cos(yawRadians);  // forward-backward distance
 
-                // Depending on your plane of reference, you may need to use z and adjust for pitch/roll
-                // Apply similar transformations for pitch and roll if needed for more precision
+                Pose relativePos = new Pose(-trueX, -trueY, Math.toRadians(-yawDegrees)); // negate everything to work
 
-                // Output the corrected coordinates
-                telemetry.addData("Corrected X", "%.1f", correctedX);
-                telemetry.addData("Corrected Y", "%.1f", correctedY);
-                telemetry.addData("Yaw (Degrees)", "%.1f", yawDegrees);
-                telemetry.addData("Pitch (Degrees)", "%.1f", pitchDegrees);
-                telemetry.addData("Roll (Degrees)", "%.1f", rollDegrees);
+                Pose realPos = tagPos.subtractAndReturn(relativePos);
+
+                // Output the transformed global coordinates
+                telemetry.addData("True X (Tag)", "%.1f", trueX);
+                telemetry.addData("True Y (Tag)", "%.1f", trueY);
+                telemetry.addData("Yaw (Tag Degrees)", "%.1f", yawDegrees);
+                telemetry.addData("True X (Global)", "%.1f", realPos.getX());
+                telemetry.addData("True Y (Global)", "%.1f", realPos.getY());
+                telemetry.addData("Yaw (Global Degrees)", "%.1f", Math.toDegrees(realPos.getHeading()));
             } else {
                 telemetry.addLine(String.valueOf(detection.id));
             }

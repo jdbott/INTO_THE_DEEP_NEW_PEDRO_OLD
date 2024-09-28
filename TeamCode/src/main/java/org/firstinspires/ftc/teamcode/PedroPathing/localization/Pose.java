@@ -146,6 +146,10 @@ public class Pose {
         setHeading(heading - pose.getHeading());
     }
 
+    public Pose subtractAndReturn(Pose pose) {
+        return new Pose(this.x - pose.getX(), this.y - pose.getY(), this.heading - pose.getHeading());
+    }
+
     /**
      * This multiplies all the values of this Pose by a scalar.
      *
