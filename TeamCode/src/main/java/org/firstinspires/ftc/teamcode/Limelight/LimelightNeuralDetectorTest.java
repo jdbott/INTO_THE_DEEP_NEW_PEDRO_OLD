@@ -9,7 +9,6 @@ import java.util.List;
 @TeleOp(name = "LimelightDetectorTest", group = "Sensor")
 public class LimelightNeuralDetectorTest extends LinearOpMode {
 
-
     public void runOpMode() throws InterruptedException {
         Limelight limelight = new Limelight(hardwareMap);
 
@@ -32,17 +31,26 @@ public class LimelightNeuralDetectorTest extends LinearOpMode {
                         double objectWidthPixels = DistanceEstimator.getObjectWidthInPixels(targetCorners);
                         double objectHeightPixels = DistanceEstimator.getObjectHeightInPixels(targetCorners);
 
-                        // Estimate distance using diagonal or width/height based on orientation
-                        double diagonalDistance = DistanceEstimator.estimateDistanceFromDiagonal(
-                                Math.sqrt(Math.pow(DistanceEstimator.REAL_WORLD_WIDTH, 2) + Math.pow(DistanceEstimator.REAL_WORLD_HEIGHT, 2)),
-                                diagonalPixels
-                        );
-                        double widthDistance = DistanceEstimator.estimateDistanceFromWidth(DistanceEstimator.REAL_WORLD_WIDTH, objectWidthPixels);
-                        double heightDistance = DistanceEstimator.estimateDistanceFromHeight(DistanceEstimator.REAL_WORLD_HEIGHT, objectHeightPixels);
+                        // Calculate the aspect ratio
+                        double aspectRatio = objectWidthPixels / objectHeightPixels;
+                        double distanceEstimate;
 
-                        telemetry.addData("Distance (Diagonal)", "%.2f meters", diagonalDistance);
-                        telemetry.addData("Distance (Width)", "%.2f meters", widthDistance);
-                        telemetry.addData("Distance (Height)", "%.2f meters", heightDistance);
+                        // Automatic method selection based on aspect ratio
+                        if (aspectRatio > 1.2) {
+                            distanceEstimate = DistanceEstimator.estimateDistanceFromWidth(DistanceEstimator.REAL_WORLD_WIDTH, objectWidthPixels);
+                            telemetry.addData("Method Used", "Width Distance");
+                        } else if (aspectRatio < 0.8) {
+                            distanceEstimate = DistanceEstimator.estimateDistanceFromHeight(DistanceEstimator.REAL_WORLD_HEIGHT, objectHeightPixels);
+                            telemetry.addData("Method Used", "Height Distance");
+                        } else {
+                            distanceEstimate = DistanceEstimator.estimateDistanceFromDiagonal(
+                                    Math.sqrt(Math.pow(DistanceEstimator.REAL_WORLD_WIDTH, 2) + Math.pow(DistanceEstimator.REAL_WORLD_HEIGHT, 2)),
+                                    diagonalPixels
+                            );
+                            telemetry.addData("Method Used", "Diagonal Distance");
+                        }
+
+                        telemetry.addData("Estimated Distance", "%.2f meters", distanceEstimate);
                     }
                 });
             } else {
