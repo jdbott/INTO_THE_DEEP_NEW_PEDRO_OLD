@@ -8,6 +8,9 @@
             <goBILDA5202SeriesMotor name="leftFront" port="3" />
             <RevBlinkinLedDriver name="led" port="5" />
             <ControlHubImuBHI260AP name="imu" port="0" bus="0" />
+            <Servo name="clawServo" port="0" />
+            <Servo name="rollServo" port="1" />
+            <Servo name="pitchServo" port="2" />
         </LynxModule>
     </LynxUsbDevice>
     <Webcam name="Webcam 1" serialNumber="1DCFC9FF" />
