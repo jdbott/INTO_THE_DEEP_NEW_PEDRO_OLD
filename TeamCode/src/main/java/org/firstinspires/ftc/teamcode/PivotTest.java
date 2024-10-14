@@ -20,9 +20,11 @@ public class PivotTest extends LinearOpMode {
         while (opModeIsActive()) {
             // Check for button presses and set target angles
             if (gamepad1.x) {
-                pivot.movePivotToAngle(0);  // Move to 0 degrees
+                telemetry.addLine("X Pressed");
+                pivot.movePivotToAngle(70);  // Move to 0 degrees
             } else if (gamepad1.b) {
-                pivot.movePivotToAngle(90);  // Move to 90 degrees
+                telemetry.addLine("B Pressed");
+                pivot.movePivotToAngle(-70);  // Move to 90 degrees
             }
 
             pivot.update();

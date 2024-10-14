@@ -26,8 +26,8 @@ public class Pivot {
 
         double error = targetAngle - getPivotAngle();
 
-        if (Math.abs(error) > 10) { // Ensure error threshold is handled correctly
-            double power = error * 0.003;
+        if (Math.abs(error) > 5) { // Ensure error threshold is handled correctly
+            double power = error * 0.01;
             power = Math.max(-1, Math.min(1, power));
 
             motor.setPower(power);
