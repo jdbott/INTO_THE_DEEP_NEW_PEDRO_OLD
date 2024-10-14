@@ -39,4 +39,9 @@ public class DepositGripper {
         rollServo.setPosition(0.7);
         pitchServo.setPosition(0.92);
     }
+
+    public void gripperTransferSample() {
+        rollServo.setPosition(0);
+        pitchServo.setPosition(0);
+    }
 }

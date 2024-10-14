@@ -11,6 +11,7 @@
             <Servo name="clawServo" port="0" />
             <Servo name="rollServo" port="1" />
             <Servo name="pitchServo" port="2" />
+            <RevColorSensorV3 name="Color" bus="1" />
         </LynxModule>
     </LynxUsbDevice>
     <Webcam name="Webcam 1" serialNumber="1DCFC9FF" />

@@ -16,7 +16,7 @@ public class ColorV3 {
     public String proximityAndColor() {
         double proximity = proximity();
 
-        if (proximity <= 1.5) { // Adjust threshold based on testing
+        if (proximity <= 1) { // Adjust threshold based on testing
             return sampleColor();
         } else {
             return "Out of range";

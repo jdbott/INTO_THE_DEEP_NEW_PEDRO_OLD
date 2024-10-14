@@ -54,6 +54,10 @@ public class GripperTest extends LinearOpMode {
             } else if (!gamepad1.b) {
                 toggleB = false;
             }
+
+            if (gamepad1.x) {
+                gripper.gripperTransferSample();
+            }
         }
     }
 }
