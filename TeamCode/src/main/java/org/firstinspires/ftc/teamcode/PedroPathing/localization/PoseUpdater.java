@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.PedroPathing.localization.localizers.ThreeDeadWheelLocalizer;
+import org.firstinspires.ftc.teamcode.PedroPathing.localization.localizers.ThreeWheelIMULocalizer;
 import org.firstinspires.ftc.teamcode.PedroPathing.pathGeneration.MathFunctions;
 import org.firstinspires.ftc.teamcode.PedroPathing.pathGeneration.Vector;
 
@@ -73,11 +74,11 @@ public class PoseUpdater {
 
         // Initialize IMU and inPerTick before passing them to the localizer.
         this.imu = hardwareMap.get(IMU.class, "imu");
-        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.UP)));
+        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.DOWN, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
 
         this.inPerTick = 0.00340923; // Or some other appropriate value
 
-        // Now pass the initialized values to the localizer.
+        //Now pass the initialized values to the localizer.
         this.localizer = new ThreeDeadWheelLocalizer(hardwareMap, inPerTick, imu);
     }
 

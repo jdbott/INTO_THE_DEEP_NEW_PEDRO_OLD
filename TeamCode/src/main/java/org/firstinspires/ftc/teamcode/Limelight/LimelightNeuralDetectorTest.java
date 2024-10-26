@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Limelight;
+package org.firstinspires.ftc.teamcode.LimeLight;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -13,6 +13,7 @@ public class LimelightNeuralDetectorTest extends LinearOpMode {
         Limelight limelight = new Limelight(hardwareMap);
 
         telemetry.setMsTransmissionInterval(11);
+        limelight.getLimelight().setPollRateHz(11);
         limelight.pipelineSwitch(1);
         limelight.start();
 
@@ -22,7 +23,7 @@ public class LimelightNeuralDetectorTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            if (limelight.isConnected()) {
+            if (limelight.isConnected() && !limelight.getDetectorResults().isEmpty()) {
                 limelight.getDetectorResults().forEach(dr -> {
                     if ("blue".equals(dr.getClassName())) {
                         List<List<Double>> targetCorners = dr.getTargetCorners();

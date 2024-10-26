@@ -50,4 +50,8 @@ public class Limelight {
     public boolean isConnected() {
         return limelight.isConnected();
     }
+
+    public Limelight3A getLimelight() {
+        return limelight;
+    }
 }

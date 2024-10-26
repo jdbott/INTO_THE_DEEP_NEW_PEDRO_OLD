@@ -4,9 +4,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 public class Pivot {
-    private static final double TICKS_PER_REV = 103.8;  // Motor ticks per revolution
+    private static final double TICKS_PER_REV = 384.5;  // Motor ticks per revolution
     private static final double GEAR_REDUCTION = 28.0;  // Gear reduction
     private static final double TICKS_PER_OUTPUT_REV = TICKS_PER_REV * GEAR_REDUCTION;  // Total ticks per output revolution
     private final DcMotorEx motor;
@@ -26,11 +27,8 @@ public class Pivot {
 
         double error = targetAngle - getPivotAngle();
 
-        if (Math.abs(error) > 5) { // Ensure error threshold is handled correctly
-            double power = error * 0.01;
-            power = Math.max(-1, Math.min(1, power));
-
-            motor.setPower(power);
+        if (Math.abs(error) > 2) { // Ensure error threshold is handled correctly
+            motor.setPower(Range.clip((error * 0.04), -1, 1));
             pivotMotorBusy = true;
         } else {
             motor.setPower(0);
@@ -38,9 +36,18 @@ public class Pivot {
         }
     }
 
+    public void correctPivotPosition() {
+        if (!pivotMotorBusy) {
+            double error = lastSetPivotAngle - getPivotAngle();
+            motor.setPower(Range.clip((error * 0.15), -0.75, 0.75));
+        }
+    }
+
     public void update() {
         if (isPivotMotorBusy()) {
             movePivotToAngle(lastSetPivotAngle);
+        } else {
+            correctPivotPosition();
         }
     }
 

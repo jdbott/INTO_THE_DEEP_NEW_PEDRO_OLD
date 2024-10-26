@@ -7,11 +7,14 @@ public class DepositGripper {
     private final Servo clawServo;
     private final Servo rollServo;
     private final Servo pitchServo;
+    private final Servo pitchArmServo;
 
     public DepositGripper(HardwareMap hardwareMap) {
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         rollServo = hardwareMap.get(Servo.class, "rollServo");
         pitchServo = hardwareMap.get(Servo.class, "pitchServo");
+        pitchServo.setDirection(Servo.Direction.FORWARD);
+        pitchArmServo = hardwareMap.get(Servo.class, "pitchArmServo");
     }
 
     public void CloseGripper() {
@@ -19,7 +22,7 @@ public class DepositGripper {
     }
 
     public void OpenGripper() {
-        clawServo.setPosition(0.2);
+        clawServo.setPosition(0.3);
     }
 
     public void rotateGripperToPos(double pos) {
@@ -30,18 +33,25 @@ public class DepositGripper {
         pitchServo.setPosition(pos);
     }
 
-    public void gripperGrabSpecimen() {
-        rollServo.setPosition(0);
-        pitchServo.setPosition(0.28);
+    public void pitchArmToPos(double pos) {
+        pitchArmServo.setPosition(pos);
     }
 
-    public void gripperPlaceSpecimen() {
-        rollServo.setPosition(0.7);
-        pitchServo.setPosition(0.92);
+    public void grabSpecimen() {
+        rollServo.setPosition(0.0);
+        pitchServo.setPosition(0.0);
+        pitchArmServo.setPosition(0.0);
     }
 
-    public void gripperTransferSample() {
-        rollServo.setPosition(0);
+    public void placeSample() {
+        rollServo.setPosition(0.0); // 0.7 = halfway
+        pitchServo.setPosition(0.5);
+        pitchArmServo.setPosition(0.5);
+    }
+
+    public void placeSpecimen() {
+        rollServo.setPosition(0.7); // 0.7 = halfway
         pitchServo.setPosition(0);
+        pitchArmServo.setPosition(0.65);
     }
 }
