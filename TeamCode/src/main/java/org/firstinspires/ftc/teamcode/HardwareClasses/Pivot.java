@@ -27,7 +27,7 @@ public class Pivot {
 
         double error = targetAngle - getPivotAngle();
 
-        if (Math.abs(error) > 2) { // Ensure error threshold is handled correctly
+        if (Math.abs(error) > 1) { // Ensure error threshold is handled correctly
             motor.setPower(Range.clip((error * 0.04), -1, 1));
             pivotMotorBusy = true;
         } else {
@@ -39,7 +39,7 @@ public class Pivot {
     public void correctPivotPosition() {
         if (!pivotMotorBusy) {
             double error = lastSetPivotAngle - getPivotAngle();
-            motor.setPower(Range.clip((error * 0.15), -0.75, 0.75));
+            motor.setPower(Range.clip((error * 0.15), -1, 1));
         }
     }
 

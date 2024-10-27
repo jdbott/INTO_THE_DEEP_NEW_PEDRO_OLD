@@ -43,6 +43,18 @@ public class DepositGripper {
         pitchArmServo.setPosition(0.0);
     }
 
+    public void grabSample() {
+        rollServo.setPosition(0);
+        pitchServo.setPosition(0.1);
+        pitchArmServo.setPosition(0.75);
+    }
+
+    public void grabSampleFully() {
+        rollServo.setPosition(0);
+        pitchServo.setPosition(0.2);
+        pitchArmServo.setPosition(0.87);
+    }
+
     public void placeSample() {
         rollServo.setPosition(0.0); // 0.7 = halfway
         pitchServo.setPosition(0.5);
@@ -53,5 +65,11 @@ public class DepositGripper {
         rollServo.setPosition(0.7); // 0.7 = halfway
         pitchServo.setPosition(0);
         pitchArmServo.setPosition(0.65);
+    }
+
+    public void placeSpecimenFully() {
+        rollServo.setPosition(0.7); // 0.7 = halfway
+        pitchServo.setPosition(0);
+        pitchArmServo.setPosition(0.7);
     }
 }

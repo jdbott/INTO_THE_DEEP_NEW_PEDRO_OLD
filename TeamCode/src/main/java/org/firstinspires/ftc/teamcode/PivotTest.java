@@ -34,7 +34,7 @@ public class PivotTest extends LinearOpMode {
             } else if (gamepad1.dpad_right) {
                 pivot.movePivotToAngle(pivot.getPivotAngle() - 10);
             } else if (gamepad1.a) {
-                linearSlide.moveSlidesToPositionInches(38);
+                linearSlide.moveSlidesToPositionInches(10);
             } else if (gamepad1.b) {
                 linearSlide.moveSlidesToPositionInches(0);
             }

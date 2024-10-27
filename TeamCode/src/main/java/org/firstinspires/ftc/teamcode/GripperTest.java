@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.HardwareClasses.DepositGripper;
@@ -14,8 +15,12 @@ import org.firstinspires.ftc.teamcode.PedroPathing.localization.Pose;
 public class GripperTest extends LinearOpMode {
     private DepositGripper gripper;
     private LinearSlide linearSlide;
-    private Follower follower;
     private Pivot pivot;
+
+    private DcMotor leftFront;
+    private DcMotor leftBack;
+    private DcMotor rightFront;
+    private DcMotor rightBack;
 
     private boolean isGripperOpen = false;
     private boolean toggleA = false;
@@ -27,8 +32,6 @@ public class GripperTest extends LinearOpMode {
         // Get the color sensor from hardwareMap
         gripper = new DepositGripper(hardwareMap);
         pivot = new Pivot(hardwareMap);
-        follower = new Follower(hardwareMap);
-        follower.setStartingPose(new Pose(0, 0, Math.toRadians(0)));
 
         String[] motorNames = {"slideMotor"};
         DcMotorSimple.Direction[] directions = {DcMotorSimple.Direction.REVERSE};
@@ -36,18 +39,44 @@ public class GripperTest extends LinearOpMode {
 
         gripper.CloseGripper();
         gripper.grabSpecimen();
-        follower.startTeleopDrive();
+
+        // Initialize mecanum drive motors
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+
+        // Set motor directions
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Wait for the Play button to be pressed
         waitForStart();
 
         // While the Op Mode is running, check proximity and detect color
         while (opModeIsActive()) {
-            follower.setTeleOpMovementVectors(
-                    -gamepad1.left_stick_y,
-                    -gamepad1.left_stick_x,
-                    -gamepad1.right_stick_x
-            );
+            // Mecanum drive control
+            double y = -gamepad1.left_stick_y; // Invert Y axis
+            double x = gamepad1.left_stick_x * 1.1; // Adjust for strafing power
+            double rx = gamepad1.right_stick_x;
+
+            // Calculate motor powers
+            double frontLeftPower = y + x + rx;
+            double backLeftPower = y - x + rx;
+            double frontRightPower = y - x - rx;
+            double backRightPower = y + x - rx;
+
+            // Clip the motor powers to ensure they are within the range [-1, 1]
+            frontLeftPower = Math.max(-1, Math.min(1, frontLeftPower));
+            backLeftPower = Math.max(-1, Math.min(1, backLeftPower));
+            frontRightPower = Math.max(-1, Math.min(1, frontRightPower));
+            backRightPower = Math.max(-1, Math.min(1, backRightPower));
+
+            // Set the motor powers
+            leftFront.setPower(frontLeftPower);
+            leftBack.setPower(backLeftPower);
+            rightFront.setPower(frontRightPower);
+            rightBack.setPower(backRightPower);
 
             if (gamepad1.dpad_left) {
                 pivot.movePivotToAngle(15);
@@ -58,11 +87,19 @@ public class GripperTest extends LinearOpMode {
                 linearSlide.moveSlidesToPositionInches(2);
                 gripper.grabSpecimen();
             } else if (gamepad1.dpad_up) {
-                pivot.movePivotToAngle(50);
+                pivot.movePivotToAngle(40);
                 linearSlide.moveSlidesToPositionInches(15);
                 gripper.placeSpecimen();
+            } else if (gamepad1.dpad_down) {
+                pivot.movePivotToAngle(70);
+                linearSlide.moveSlidesToPositionInches(15);
+                gripper.grabSample();
+            } else if (gamepad1.b) {
+                gripper.grabSampleFully();
+            } else if (gamepad1.y) {
+                gripper.placeSpecimenFully();
             }
-            
+
             // Toggle gripper open/close using A button
             if (gamepad1.a && !toggleA) {
                 isGripperOpen = !isGripperOpen;
@@ -78,7 +115,6 @@ public class GripperTest extends LinearOpMode {
 
             linearSlide.update();
             pivot.update();
-            follower.update();
         }
     }
 }
