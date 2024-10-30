@@ -45,14 +45,13 @@ public class DepositGripper {
 
     public void grabSample() {
         rollServo.setPosition(0);
-        pitchServo.setPosition(0.1);
-        pitchArmServo.setPosition(0.75);
+        pitchServo.setPosition(0.05);
+        pitchArmServo.setPosition(0.65);
     }
 
     public void grabSampleFully() {
-        rollServo.setPosition(0);
-        pitchServo.setPosition(0.2);
-        pitchArmServo.setPosition(0.87);
+        pitchServo.setPosition(0.1);
+        pitchArmServo.setPosition(0.71);
     }
 
     public void placeSample() {

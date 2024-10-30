@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.HardwareClasses.DepositGripper;
 import org.firstinspires.ftc.teamcode.HardwareClasses.LinearSlide;
 import org.firstinspires.ftc.teamcode.HardwareClasses.Pivot;
-import org.firstinspires.ftc.teamcode.PedroPathing.follower.Follower;
-import org.firstinspires.ftc.teamcode.PedroPathing.localization.Pose;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @TeleOp
 public class GripperTest extends LinearOpMode {
@@ -23,9 +23,9 @@ public class GripperTest extends LinearOpMode {
     private DcMotor rightBack;
 
     private boolean isGripperOpen = false;
-    private boolean toggleA = false;
-    private boolean actionState = false;
-    private boolean toggleB = false;
+    private boolean isGripperRotated = false;
+    private boolean toggleRightBumper = false;
+    private boolean toggleLeftBumper = false;
 
     @Override
     public void runOpMode() {
@@ -49,6 +49,11 @@ public class GripperTest extends LinearOpMode {
         // Set motor directions
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        while (opModeInInit() && !isStopRequested()) {
+            pivot.movePivotToAngle(90);
+            pivot.update();
+        }
 
         // Wait for the Play button to be pressed
         waitForStart();
@@ -78,39 +83,79 @@ public class GripperTest extends LinearOpMode {
             rightFront.setPower(frontRightPower);
             rightBack.setPower(backRightPower);
 
-            if (gamepad1.dpad_left) {
-                pivot.movePivotToAngle(15);
-                linearSlide.moveSlidesToPositionInches(19);
-                gripper.placeSample();
-            } else if (gamepad1.dpad_right) {
+//            if (gamepad1.dpad_left) {
+//                pivot.movePivotToAngle(15);
+//                linearSlide.moveSlidesToPositionInches(19);
+//                gripper.placeSample();
+//            } else
+//            } else if (gamepad1.dpad_down) {
+//                pivot.movePivotToAngle(70);
+//                linearSlide.moveSlidesToPositionInches(15);
+//                gripper.grabSample();
+//            else if (gamepad1.b) {
+//                gripper.grabSampleFully();
+
+            if (gamepad1.a) {
                 pivot.movePivotToAngle(0);
                 linearSlide.moveSlidesToPositionInches(2);
                 gripper.grabSpecimen();
-            } else if (gamepad1.dpad_up) {
+            } else if (gamepad1.b) {
                 pivot.movePivotToAngle(40);
                 linearSlide.moveSlidesToPositionInches(15);
                 gripper.placeSpecimen();
-            } else if (gamepad1.dpad_down) {
-                pivot.movePivotToAngle(70);
-                linearSlide.moveSlidesToPositionInches(15);
+            } else if (gamepad1.x) {
+                pivot.movePivotToAngle(90);
+                linearSlide.moveSlidesToPositionInches(8);
                 gripper.grabSample();
-            } else if (gamepad1.b) {
-                gripper.grabSampleFully();
             } else if (gamepad1.y) {
+                pivot.movePivotToAngle(15);
+                linearSlide.moveSlidesToPositionInches(19);
+                gripper.placeSample();
+            } else if (gamepad1.dpad_up) {
+                pivot.movePivotToAngle(0);
+                linearSlide.moveSlidesToPositionInches(5);
+                gripper.grabSpecimen();
+            } else if (gamepad1.dpad_left) {
+                pivot.movePivotToAngle(0);
+                linearSlide.moveSlidesToPositionInches(0);
+                gripper.grabSpecimen();
+            } else if (gamepad1.dpad_down) {
+                pivot.movePivotToAngle(90);
+                linearSlide.moveSlidesToPositionInches(0);
+                gripper.grabSpecimen();
+            }
+
+            if (gamepad1.right_trigger > 0.5) {
                 gripper.placeSpecimenFully();
+                linearSlide.moveSlidesToPositionInches(8);
+            } else if (gamepad1.left_trigger > 0.5) {
+                gripper.grabSampleFully();
+            }
+
+            // Toggle rotate gripper open/close using A button
+            if (gamepad1.left_bumper && !toggleLeftBumper) {
+                isGripperRotated = !isGripperRotated;
+                toggleLeftBumper = true;
+                if (isGripperRotated) {
+                    gripper.rotateGripperToPos(0.35);
+                } else {
+                    gripper.rotateGripperToPos(0);
+                }
+            } else if (!gamepad1.left_bumper) {
+                toggleLeftBumper = false;
             }
 
             // Toggle gripper open/close using A button
-            if (gamepad1.a && !toggleA) {
+            if (gamepad1.right_bumper && !toggleRightBumper) {
                 isGripperOpen = !isGripperOpen;
-                toggleA = true;
+                toggleRightBumper = true;
                 if (isGripperOpen) {
                     gripper.OpenGripper();
                 } else {
                     gripper.CloseGripper();
                 }
-            } else if (!gamepad1.a) {
-                toggleA = false;
+            } else if (!gamepad1.right_bumper) {
+                toggleRightBumper = false;
             }
 
             linearSlide.update();
