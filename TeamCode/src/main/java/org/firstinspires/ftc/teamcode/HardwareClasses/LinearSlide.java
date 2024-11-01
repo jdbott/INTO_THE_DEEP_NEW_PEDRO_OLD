@@ -34,6 +34,12 @@ public class LinearSlide {
         }
     }
 
+    public void setSlidePower(double pivotPower){
+        for (DcMotorEx motor : motors) {
+            motor.setPower(pivotPower);
+        }
+    }
+
     // Convert inches to motor ticks
     private double inchesToTicks(double inches) {
         return inches * ticksPerInch;
