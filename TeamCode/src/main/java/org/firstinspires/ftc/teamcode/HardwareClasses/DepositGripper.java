@@ -22,7 +22,7 @@ public class DepositGripper {
     }
 
     public void OpenGripper() {
-        clawServo.setPosition(0.3);
+        clawServo.setPosition(0.35);
     }
 
     public void rotateGripperToPos(double pos) {
