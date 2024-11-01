@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.HardwareClasses.Pivot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@TeleOp
+@TeleOp (name = "AAAAA Teleop (so it shows up on top :)")
 public class GripperTest extends LinearOpMode {
     private DepositGripper gripper;
     private LinearSlide linearSlide;
@@ -100,11 +100,11 @@ public class GripperTest extends LinearOpMode {
                 linearSlide.moveSlidesToPositionInches(2);
                 gripper.grabSpecimen();
             } else if (gamepad1.b) {
-                pivot.movePivotToAngle(40);
+                pivot.movePivotToAngle(45);
                 linearSlide.moveSlidesToPositionInches(15);
                 gripper.placeSpecimen();
             } else if (gamepad1.x) {
-                pivot.movePivotToAngle(90);
+                pivot.movePivotToAngle(85);
                 linearSlide.moveSlidesToPositionInches(8);
                 gripper.grabSample();
             } else if (gamepad1.y) {
@@ -129,6 +129,7 @@ public class GripperTest extends LinearOpMode {
                 gripper.placeSpecimenFully();
                 linearSlide.moveSlidesToPositionInches(8);
             } else if (gamepad1.left_trigger > 0.5) {
+                pivot.movePivotToAngle(90);
                 gripper.grabSampleFully();
             }
 

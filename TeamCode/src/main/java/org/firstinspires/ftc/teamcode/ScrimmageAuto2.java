@@ -18,26 +18,28 @@ import org.firstinspires.ftc.teamcode.PedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.PedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.PedroPathing.util.Timer;
 
-@Autonomous(name = "AAAAA Auto BLUE")
-public class ScrimmageAuto extends OpMode {
+@Autonomous(name = "AAAAA Auto RED")
+public class ScrimmageAuto2 extends OpMode {
 
-    public DepositGripper gripper;
-    public LinearSlide linearSlide;
-    public Pivot pivot;
     // Initialize path following stuff
     private Follower follower;
     private Path toChamber, toHumanPlayer, toBasket, toSpike1, toSpike2, toSpike3, toPark;
     private Timer pathTimer;
     private int pathState;
     private int times;
+
     // Initialize telemetry and any other subsystems and variables
     private Telemetry telemetryA;
+
+    public DepositGripper gripper;
+    public LinearSlide linearSlide;
+    public Pivot pivot;
 
     @Override
     public void init() {
         // Initialize path stuff with hardwareMap
         follower = new Follower(hardwareMap);
-        follower.setStartingPose(new Pose(12, -63.5, Math.toRadians(90)));
+        follower.setStartingPose(new Pose(-12, 63.5, Math.toRadians(-90)));
         follower.setMaxPower(0.5);
         pathTimer = new Timer();
         pathState = 0;
@@ -84,10 +86,11 @@ public class ScrimmageAuto extends OpMode {
             case 0:
                 toChamber = new Path(new BezierLine(
                         new Point(follower.getPose().getX(), follower.getPose().getY(), Point.CARTESIAN),
-                        new Point(0, -47, Point.CARTESIAN)));
-                toChamber.setConstantHeadingInterpolation(Math.toRadians(90));
+                        new Point(0, 45, Point.CARTESIAN)));
+                toChamber.setConstantHeadingInterpolation(Math.toRadians(-90));
                 follower.followPath(toChamber, true);
                 pivot.movePivotToAngle(40);
+                linearSlide.moveSlidesToPositionInches(15);
                 gripper.placeSpecimen();
                 setPathState(1);
                 times = 0;
@@ -99,17 +102,12 @@ public class ScrimmageAuto extends OpMode {
                         setPathState(1);
                         times = 1;
                     }
-                    linearSlide.moveSlidesToPositionInches(15);
+                    gripper.placeSpecimenFully();
+                    linearSlide.moveSlidesToPositionInches(8);
 
-                    if (pathTimer.getElapsedTimeSeconds() > 1.5) {
-
-                        gripper.placeSpecimenFully();
-                        linearSlide.moveSlidesToPositionInches(7);
-
-                        if (pathTimer.getElapsedTimeSeconds() > 2.25) {
-                            gripper.OpenGripper();
-                            setPathState(2);
-                        }
+                    if (pathTimer.getElapsedTimeSeconds() > 0.75) {
+                        gripper.OpenGripper();
+                        setPathState(2);
                     }
                 }
                 break;
@@ -117,9 +115,9 @@ public class ScrimmageAuto extends OpMode {
             case 2:
                 toHumanPlayer = new Path(new BezierCurve(
                         new Point(follower.getPose().getX(), follower.getPose().getY(), Point.CARTESIAN),
-                        new Point(48, -55, Point.CARTESIAN),
-                        new Point(48, -62, Point.CARTESIAN)));
-                toHumanPlayer.setConstantHeadingInterpolation(Math.toRadians(90));
+                        new Point(-48, 55, Point.CARTESIAN),
+                        new Point(-48, 62, Point.CARTESIAN)));
+                toHumanPlayer.setConstantHeadingInterpolation(Math.toRadians(-90));
                 follower.followPath(toHumanPlayer, true);
                 pivot.movePivotToAngle(0);
                 linearSlide.moveSlidesToPositionInches(2);
@@ -145,10 +143,11 @@ public class ScrimmageAuto extends OpMode {
             case 4:
                 toChamber = new Path(new BezierLine(
                         new Point(follower.getPose().getX(), follower.getPose().getY(), Point.CARTESIAN),
-                        new Point(5, -47, Point.CARTESIAN)));
-                toChamber.setConstantHeadingInterpolation(Math.toRadians(90));
+                        new Point(-5, 45, Point.CARTESIAN)));
+                toChamber.setConstantHeadingInterpolation(Math.toRadians(-90));
                 follower.followPath(toChamber, true);
                 pivot.movePivotToAngle(40);
+                linearSlide.moveSlidesToPositionInches(15);
                 gripper.placeSpecimen();
                 setPathState(5);
                 times = 0;
@@ -160,17 +159,12 @@ public class ScrimmageAuto extends OpMode {
                         setPathState(5);
                         times = 1;
                     }
-                    linearSlide.moveSlidesToPositionInches(15);
+                    gripper.placeSpecimenFully();
+                    linearSlide.moveSlidesToPositionInches(8);
 
-                    if (pathTimer.getElapsedTimeSeconds() > 1.5) {
-
-                        gripper.placeSpecimenFully();
-                        linearSlide.moveSlidesToPositionInches(7);
-
-                        if (pathTimer.getElapsedTimeSeconds() > 2.25) {
-                            gripper.OpenGripper();
-                            setPathState(6);
-                        }
+                    if (pathTimer.getElapsedTimeSeconds() > 0.75) {
+                        gripper.OpenGripper();
+                        setPathState(6);
                     }
                 }
                 break;
@@ -185,8 +179,8 @@ public class ScrimmageAuto extends OpMode {
             case 7:
                 toSpike1 = new Path(new BezierLine(
                         new Point(follower.getPose().getX(), follower.getPose().getY(), Point.CARTESIAN),
-                        new Point(-58, -49, Point.CARTESIAN)));
-                toSpike1.setConstantHeadingInterpolation(Math.toRadians(90));
+                        new Point(57, 47.5, Point.CARTESIAN)));
+                toSpike1.setConstantHeadingInterpolation(Math.toRadians(-90));
                 follower.followPath(toSpike1, true);
                 setPathState(8);
                 times = 0;
@@ -217,8 +211,8 @@ public class ScrimmageAuto extends OpMode {
             case 9:
                 toBasket = new Path(new BezierLine(
                         new Point(follower.getPose().getX(), follower.getPose().getY(), Point.CARTESIAN),
-                        new Point(-67, -60, Point.CARTESIAN)));
-                toBasket.setConstantHeadingInterpolation(Math.toRadians(45));
+                        new Point(67, 60, Point.CARTESIAN)));
+                toBasket.setConstantHeadingInterpolation(Math.toRadians(-45));
                 follower.followPath(toBasket, true);
                 pivot.movePivotToAngle(15);
                 linearSlide.moveSlidesToPositionInches(19);
@@ -244,8 +238,8 @@ public class ScrimmageAuto extends OpMode {
             case 11:
                 toSpike2 = new Path(new BezierLine(
                         new Point(follower.getPose().getX(), follower.getPose().getY(), Point.CARTESIAN),
-                        new Point(-70, -49, Point.CARTESIAN)));
-                toSpike2.setConstantHeadingInterpolation(Math.toRadians(90));
+                        new Point(69, 47.5, Point.CARTESIAN)));
+                toSpike2.setConstantHeadingInterpolation(Math.toRadians(-90));
                 follower.followPath(toSpike2, true);
                 pivot.movePivotToAngle(90);
                 linearSlide.moveSlidesToPositionInches(8);
@@ -272,8 +266,8 @@ public class ScrimmageAuto extends OpMode {
             case 13:
                 toBasket = new Path(new BezierLine(
                         new Point(follower.getPose().getX(), follower.getPose().getY(), Point.CARTESIAN),
-                        new Point(-67, -60, Point.CARTESIAN)));
-                toBasket.setConstantHeadingInterpolation(Math.toRadians(45));
+                        new Point(67, 60, Point.CARTESIAN)));
+                toBasket.setConstantHeadingInterpolation(Math.toRadians(-45));
                 follower.followPath(toBasket, true);
                 pivot.movePivotToAngle(15);
                 linearSlide.moveSlidesToPositionInches(19);
@@ -297,11 +291,10 @@ public class ScrimmageAuto extends OpMode {
                 break;
 
             case 15:
-                toPark = new Path(new BezierCurve(
+                toPark = new Path(new BezierLine(
                         new Point(follower.getPose().getX(), follower.getPose().getY(), Point.CARTESIAN),
-                        new Point(-45, 0, Point.CARTESIAN),
-                        new Point(-20, 10, Point.CARTESIAN)));
-                toPark.setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180));
+                        new Point(20, 5, Point.CARTESIAN)));
+                toPark.setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(180));
                 follower.followPath(toPark, true);
                 pivot.movePivotToAngle(0);
                 setPathState(16);
