@@ -36,6 +36,10 @@ public class Pivot {
         }
     }
 
+    public void setPivotPower(double pivotPower){
+        motor.setPower(pivotPower);
+    }
+
     public void correctPivotPosition() {
         if (!pivotMotorBusy) {
             double error = lastSetPivotAngle - getPivotAngle();

@@ -95,6 +95,16 @@ public class GripperTest extends LinearOpMode {
 //            else if (gamepad1.b) {
 //                gripper.grabSampleFully();
 
+            // Manual Code
+            if (gamepad2.right_trigger > 0){
+                pivot.setPivotPower(gamepad2.right_trigger);
+            } else if(gamepad2.left_trigger > 0) {
+                pivot.setPivotPower(gamepad2.left_trigger*-1);
+            }
+
+            linearSlide.setSlidePower(gamepad2.right_stick_y);
+
+
             if (gamepad1.a) {
                 pivot.movePivotToAngle(0);
                 linearSlide.moveSlidesToPositionInches(2);

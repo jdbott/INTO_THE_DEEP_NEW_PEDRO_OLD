@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.LimeLight;
+package org.firstinspires.ftc.teamcode.Limelight;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
