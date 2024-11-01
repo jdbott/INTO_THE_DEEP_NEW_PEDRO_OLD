@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class DepositGripper {
-    private final Servo clawServo;
-    private final Servo rollServo;
-    private final Servo pitchServo;
-    private final Servo pitchArmServo;
+    public final Servo clawServo;
+    public final Servo rollServo;
+    public final Servo pitchServo;
+    public final Servo pitchArmServo;
 
     public DepositGripper(HardwareMap hardwareMap) {
         clawServo = hardwareMap.get(Servo.class, "clawServo");

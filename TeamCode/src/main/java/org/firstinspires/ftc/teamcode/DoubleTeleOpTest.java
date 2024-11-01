@@ -8,11 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.HardwareClasses.DepositGripper;
 import org.firstinspires.ftc.teamcode.HardwareClasses.LinearSlide;
 import org.firstinspires.ftc.teamcode.HardwareClasses.Pivot;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @TeleOp (name = "AAAAA Teleop (so it shows up on top :)")
-public class GripperTest extends LinearOpMode {
+public class DoubleTeleOpTest extends LinearOpMode {
     private DepositGripper gripper;
     private LinearSlide linearSlide;
     private Pivot pivot;
@@ -102,8 +100,25 @@ public class GripperTest extends LinearOpMode {
                 pivot.setPivotPower(gamepad2.left_trigger*-1);
             }
 
-            linearSlide.setSlidePower(gamepad2.right_stick_y);
+            double originalPitchPosition = 0;
+            double originalRollPosition = 0;
 
+            originalPitchPosition += gamepad2.left_stick_y * 0.01;
+            originalRollPosition += gamepad2.left_stick_x * 0.01;
+
+            // Clamp the new positions between 0 and 1
+            originalPitchPosition = Math.max(0, Math.min(1, originalPitchPosition));
+            originalRollPosition = Math.max(0, Math.min(1, originalRollPosition));
+
+            // Set the new positions
+            telemetry.addData("Pitch Position", originalPitchPosition);
+            telemetry.addData("Roll Position", originalRollPosition);
+            telemetry.update();
+
+            gripper.pitchServo.setPosition(originalPitchPosition);
+            gripper.rollServo.setPosition(originalRollPosition);
+
+            linearSlide.setSlidePower(gamepad2.right_stick_y);
 
             if (gamepad1.a) {
                 pivot.movePivotToAngle(0);
