@@ -33,9 +33,12 @@ public class Limelight {
         return limelight.getLatestResult().getTx();
     }
 
+    public LLResult getLatestResult() {
+        return limelight.getLatestResult();
+    }
     // Get the pose of the robot (botpose) from the latest result
     public Pose3D getBotpose() {
-        return limelight.getLatestResult().getBotpose();
+        return limelight.getLatestResult().getBotpose_MT2();
     }
 
     // Get detector results (e.g., for object detection)
@@ -54,4 +57,10 @@ public class Limelight {
     public Limelight3A getLimelight() {
         return limelight;
     }
+
+    public void updateRobotOrientation(double robotYaw) {
+        limelight.updateRobotOrientation(robotYaw);
+    }
+
+
 }

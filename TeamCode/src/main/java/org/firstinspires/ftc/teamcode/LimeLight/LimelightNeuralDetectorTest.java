@@ -9,6 +9,7 @@ import java.util.List;
 @TeleOp(name = "LimelightDetectorTest", group = "Sensor")
 public class LimelightNeuralDetectorTest extends LinearOpMode {
 
+    @Override
     public void runOpMode() throws InterruptedException {
         Limelight limelight = new Limelight(hardwareMap);
 
