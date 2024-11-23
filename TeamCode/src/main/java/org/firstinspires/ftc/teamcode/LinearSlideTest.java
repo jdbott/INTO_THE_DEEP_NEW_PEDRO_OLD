@@ -17,7 +17,7 @@ public class LinearSlideTest extends LinearOpMode {
     public void runOpMode() {
         String[] motorNames = {"slideMotor"};
         DcMotorSimple.Direction[] directions = {DcMotorSimple.Direction.REVERSE};
-        LinearSlide linearSlide = new LinearSlide(hardwareMap, motorNames, directions, 112, 0, 10.5); // Example ticksPerInch and limits
+        LinearSlide linearSlide = new LinearSlide(hardwareMap, motorNames, directions, 76.51, 0, 37.5); // Example ticksPerInch and limits
 
         // Wait for the Play button to be pressed
         waitForStart();
@@ -26,7 +26,7 @@ public class LinearSlideTest extends LinearOpMode {
             if (gamepad1.a) {
                 linearSlide.moveSlidesToPositionInches(0);
             } else if (gamepad1.b) {
-                linearSlide.moveSlidesToPositionInches(10.5);
+                linearSlide.moveSlidesToPositionInches(37.5);
             }
 
             linearSlide.update();
