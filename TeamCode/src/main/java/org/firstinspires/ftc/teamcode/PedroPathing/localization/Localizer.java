@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.PedroPathing.localization;
+package org.firstinspires.ftc.teamcode.pedroPathing.localization;
 
-import org.firstinspires.ftc.teamcode.PedroPathing.pathGeneration.Vector;
+import com.qualcomm.robotcore.hardware.IMU;
+
+import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Vector;
 
 /**
  * This is the Localizer class. It is an abstract superclass of all localizers used in Pedro Pathing,
@@ -90,5 +92,14 @@ public abstract class Localizer {
     /**
      * This resets the IMU of the localizer, if applicable.
      */
-    public abstract void resetIMU();
+    public abstract void resetIMU() throws InterruptedException;
+
+    /**
+     * This is overridden to return the IMU, if there is one.
+     *
+     * @return returns the IMU if it exists
+     */
+    public IMU getIMU() {
+        return null;
+    }
 }
